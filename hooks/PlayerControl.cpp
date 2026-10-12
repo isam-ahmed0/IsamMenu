@@ -952,6 +952,10 @@ void dPlayerControl_OnGameStart(PlayerControl* __this, MethodInfo* method) {
                 SendKillImmuneToggle(true);
             }
 
+            if (State.Immortality) {
+                SendImmortalityToggle(true);
+            }
+
             if (State.ControlPet) {
                 State.petPos = PlayerControl_GetTruePosition(*Game::pLocalPlayer, NULL);
             }
@@ -988,6 +992,15 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
                     convert_from_string(GetPlayerOutfit(GetPlayerData(__this))->fields.PlayerName));
 
                 Toasts::AddToast("Kill Immunity", killNotif, ImVec4(1.f, 0.f, 0.f, 1.f));
+
+                PlayerControl_ShowFailedMurder(*Game::pLocalPlayer, NULL);
+            }
+
+            if (!State.PanicMode && State.Immortality && target == *Game::pLocalPlayer) {
+                std::string killNotif = std::format("{} attempted to kill you!",
+                    convert_from_string(GetPlayerOutfit(GetPlayerData(__this))->fields.PlayerName));
+
+                Toasts::AddToast("Immortality", killNotif, ImVec4(1.f, 0.f, 0.f, 1.f));
 
                 PlayerControl_ShowFailedMurder(*Game::pLocalPlayer, NULL);
             }

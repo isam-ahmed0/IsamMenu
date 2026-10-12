@@ -214,6 +214,7 @@
 - Prevent Self-Report
 - Fake Alive
 - God Mode
+- Immortality
 - Teleport
 - Rotate Everyone
 - Select Role

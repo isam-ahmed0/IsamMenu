@@ -305,6 +305,7 @@ std::string strToLower(std::string str);
 bool IsRandomAUName(const std::string& name);
 bool IsDater(std::string username, int playerCount = 4);
 void SendKillImmuneToggle(bool enabled);
+void SendImmortalityToggle(bool enabled);
 void SendBootVentNonHost(PlayerControl* player, int ventId, int targetNetId = -2);
 std::string GetTimeString(bool useLeadingZeroForHours = true, bool showSeconds = true);
 void ReloadCurrentSceneIfNeeded();

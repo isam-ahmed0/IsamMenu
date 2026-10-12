@@ -614,6 +614,11 @@ namespace SelfTab {
                 State.Save();
             }
             ImGui::SameLine();
+            if (ToggleButton("Immortality", &State.Immortality)) {
+                SendImmortalityToggle(State.Immortality);
+                State.Save();
+            }
+
             if (ToggleButton("Make Role Abilities Bypass Comms Sabotages", &State.RolesBypassCommsSabotage)) {
                 State.Save();
             }

@@ -171,6 +171,7 @@ void dMeetingHud_Close(MeetingHud* __this, MethodInfo* method) {
         }
 
         if (!State.PanicMode && State.KillImmunity) SendKillImmuneToggle(true);
+        if (!State.PanicMode && State.Immortality) SendImmortalityToggle(true);
     }
     catch (...) {
         LOG_ERROR("Exception occurred in MeetingHud_Close (MeetingHud)");

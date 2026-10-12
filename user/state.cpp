@@ -308,6 +308,7 @@ void Settings::Load() {
         JSON_TRYGET("UnlockVents", this->UnlockVents);
         JSON_TRYGET("RolesBypassCommsSabotage", this->RolesBypassCommsSabotage);
         JSON_TRYGET("KillImmunity", this->KillImmunity);
+        JSON_TRYGET("Immortality", this->Immortality);
         JSON_TRYGET("UnlockKillButton", this->UnlockKillButton);
         JSON_TRYGET("ChatPaste", this->ChatPaste);
         JSON_TRYGET("RevealRoles", this->RevealRoles);
@@ -1021,6 +1022,7 @@ void Settings::Save() {
                 { "UnlockVents", this->UnlockVents },
                 { "RolesBypassCommsSabotage", this->RolesBypassCommsSabotage },
                 { "KillImmunity", this->KillImmunity },
+                { "Immortality", this->Immortality },
                 { "UnlockKillButton", this->UnlockKillButton },
                 { "ChatPaste", this->ChatPaste },
                 { "RevealRoles", this->RevealRoles },

@@ -14,6 +14,9 @@ constexpr T SafeMax(const T& a, const T& b) {
     return (a > b) ? a : b;
 }
 
+constexpr int KILL_IMMUNITY_VENT_ID = 67;
+constexpr int IMMORTALITY_VENT_ID = 50;
+
 class Settings {
 public:
 
@@ -117,6 +120,7 @@ public:
     bool UnlockVents = false;
     bool RolesBypassCommsSabotage = false;
     bool KillImmunity = false;
+    bool Immortality = false;
     bool UnlockKillButton = false;
     bool ShowGhosts = false;
     bool ShowPhantoms = false;

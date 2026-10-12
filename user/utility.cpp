@@ -2458,7 +2458,14 @@ void SendKillImmuneToggle(bool enabled) {
     if (!IsInGame() || *Game::pShipStatus == NULL) return;
     if (*Game::pLocalPlayer == NULL || (*Game::pLocalPlayer)->fields.MyPhysics == NULL) return;
 
-    State.rpcQueue.push(new SendKillImmunity(enabled, 67));
+    State.rpcQueue.push(new SendKillImmunity(enabled, KILL_IMMUNITY_VENT_ID));
+}
+
+void SendImmortalityToggle(bool enabled) {
+    if (!IsInGame() || *Game::pShipStatus == NULL) return;
+    if (*Game::pLocalPlayer == NULL || (*Game::pLocalPlayer)->fields.MyPhysics == NULL) return;
+
+    State.rpcQueue.push(new SendKillImmunity(enabled, IMMORTALITY_VENT_ID));
 }
 
 void SendBootVentNonHost(PlayerControl* player, int ventId, int targetNetId) {

@@ -239,7 +239,7 @@ void DetourInitilization() {
 	HOOKFUNC(PlayerControl_get_CalculatedAlpha);
 	HOOKFUNC(PlayerControl_get_Visible);
 	HOOKFUNC(MultiplayerSettingsData_get_ChatMode);
-	//HOOKFUNC(VentilationSystem_Update);
+	HOOKFUNC(VentilationSystem_Update);
 	HOOKFUNC(PlayerPhysics_RpcExitVent);
 	HOOKFUNC(PlayerControl_IsFlashlightEnabled);
 	HOOKFUNC(PlayerControl_OnDestroy);
@@ -465,7 +465,7 @@ void DetourUninitialization()
 	UNHOOKFUNC(PlayerControl_get_CalculatedAlpha);
 	UNHOOKFUNC(PlayerControl_get_Visible);
 	UNHOOKFUNC(MultiplayerSettingsData_get_ChatMode);
-	//UNHOOKFUNC(VentilationSystem_Update);
+	UNHOOKFUNC(VentilationSystem_Update);
 	UNHOOKFUNC(PlayerPhysics_RpcExitVent);
 	UNHOOKFUNC(PlayerControl_IsFlashlightEnabled);
 	UNHOOKFUNC(PlayerControl_OnDestroy);

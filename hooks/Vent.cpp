@@ -102,10 +102,12 @@ bool dVent_TryMoveToVent(Vent* __this, Vent* otherVent, String** error, MethodIn
 
 void dVentilationSystem_Update(VentilationSystem_Operation__Enum op, int32_t ventId, MethodInfo* method) {
 	if (State.ShowHookLogs) Log.HookDebug("Hook dVentilationSystem_Update executed", false);
-	if (!State.PanicMode && State.KillImmunity && op == VentilationSystem_Operation__Enum::Exit) return;
+	if (!State.PanicMode && State.Immortality && ventId != IMMORTALITY_VENT_ID &&
+		(op == VentilationSystem_Operation__Enum::Enter || op == VentilationSystem_Operation__Enum::Exit ||
+			op == VentilationSystem_Operation__Enum::Move)) {
+		return;
+	}
 	VentilationSystem_Update(op, ventId, method);
-	/*if (State.FlipSkeld && IsHost() && op == VentilationSystem_Operation__Enum::Exit && *Game::pLocalPlayer != NULL)
-		(*Game::pLocalPlayer)->fields.inVent = false;*/ // Fix venting on Dleks
 }
 
 void dVentilationSystem_UpdateSystem(VentilationSystem* __this, PlayerControl* player, MessageReader* msgReader, MethodInfo* method) {
