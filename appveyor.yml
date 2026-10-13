@@ -6,22 +6,28 @@ environment:
   MSBUILDDISABLENODEREUSE: 1
   APPVEYOR_SAVE_CACHE_ON_ERROR: true
 
+# Cache MSVC intermediate/output dirs so MSBuild only recompiles changed files.
 cache:
   - Release
   - Release_Version
 
+test: off
+
 install:
-  - cmd: echo "No dependencies to install"
+  - cmd: echo "Ready to build"
 
 build_script:
+  # /m parallelizes MSBuild; the project already sets MultiProcessorCompilation=true,
+  # which uses all logical processors by default (so no CL_MPCount override is needed).
   - msbuild SickoMenu.sln /m /p:Configuration=Release /p:Platform=x86 /p:PlatformToolset=v143 /verbosity:minimal
   - msbuild SickoMenu.sln /m /p:Configuration=Release_Version /p:Platform=x86 /p:PlatformToolset=v143 /verbosity:minimal
 
 after_build:
-  - mkdir dist
-  - copy Release\SickoMenu.dll dist\
-  - copy Release_Version\version.dll dist\
-  - copy LICENSE dist\
+  - ps: |
+      New-Item -ItemType Directory -Force -Path dist | Out-Null
+      Copy-Item Release\SickoMenu.dll dist\ -Force
+      Copy-Item Release_Version\version.dll dist\ -Force
+      Copy-Item LICENSE dist\ -Force
 
 artifacts:
   - path: dist
