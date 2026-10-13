@@ -703,23 +703,25 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method) {
             auto followPlayer = State.followTarget.validate();
             if (State.FollowPlayer && followPlayer.has_value() && (IsInGame() || IsInLobby()) && !State.InMeeting && !State.PanicMode) {
                 auto local = *Game::pLocalPlayer;
-                auto localData = GetPlayerData(local);
-                if (local != nullptr && localData != nullptr && !localData->fields.IsDead && !local->fields.inVent
-                    && local->fields.NetTransform != nullptr && followPlayer.get_PlayerControl() != nullptr) {
-                    Vector2 targetPos = GetTrueAdjustedPosition(followPlayer.get_PlayerControl());
-                    Vector2 localPos = GetTrueAdjustedPosition(local);
-                    float dx = targetPos.x - localPos.x;
-                    float dy = targetPos.y - localPos.y;
-                    float dist = std::sqrt((dx * dx) + (dy * dy));
-                    if (dist > State.FollowPlayerDistance + 0.01f) {
-                        float step = State.FollowPlayerSpeed * Time_get_deltaTime(NULL);
-                        float remaining = dist - State.FollowPlayerDistance;
-                        if (step > remaining) step = remaining;
-                        Vector2 newPos = {
-                            localPos.x + (dx / dist) * step,
-                            localPos.y + (dy / dist) * step
-                        };
-                        CustomNetworkTransform_RpcSnapTo(local->fields.NetTransform, newPos, NULL);
+                if (local != nullptr && followPlayer.get_PlayerControl() != nullptr) {
+                    auto localData = GetPlayerData(local);
+                    if (localData != nullptr && !localData->fields.IsDead && !local->fields.inVent
+                        && local->fields.NetTransform != nullptr) {
+                        Vector2 targetPos = GetTrueAdjustedPosition(followPlayer.get_PlayerControl());
+                        Vector2 localPos = GetTrueAdjustedPosition(local);
+                        float dx = targetPos.x - localPos.x;
+                        float dy = targetPos.y - localPos.y;
+                        float dist = std::sqrt((dx * dx) + (dy * dy));
+                        if (dist > State.FollowPlayerDistance + 0.01f) {
+                            float step = State.FollowPlayerSpeed * Time_get_deltaTime(NULL);
+                            float remaining = dist - State.FollowPlayerDistance;
+                            if (step > remaining) step = remaining;
+                            Vector2 newPos = {
+                                localPos.x + (dx / dist) * step,
+                                localPos.y + (dy / dist) * step
+                            };
+                            CustomNetworkTransform_RpcSnapTo(local->fields.NetTransform, newPos, NULL);
+                        }
                     }
                 }
             }
