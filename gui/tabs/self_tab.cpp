@@ -778,7 +778,7 @@ namespace SelfTab {
                 if (State.followTarget.has_value()) {
                     auto followResult = State.followTarget.validate();
                     auto followData = followResult.has_value() ? GetPlayerData(followResult.get_PlayerControl()) : nullptr;
-                    std::string followName = followData != nullptr ? convert_from_string(followData->fields.PlayerName) : "Unknown";
+                    std::string followName = followData != nullptr ? convert_from_string(NetworkedPlayerInfo_get_PlayerName(followData, nullptr)) : "Unknown";
                     if (AnimatedButton(("Following: " + followName + " (Stop)").c_str()))
                         State.followTarget = {};
                 }
