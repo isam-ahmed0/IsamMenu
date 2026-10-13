@@ -111,6 +111,7 @@
     <ClCompile Include="rpc\RpcSetRole.cpp" />
     <ClCompile Include="rpc\RpcUsePlatform.cpp" />
     <ClCompile Include="user\achievements.cpp" />
+    <ClCompile Include="user\gamemodes.cpp" />
     <ClCompile Include="user\keybinds.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -562,6 +563,7 @@
     <ClInclude Include="includes\detours\detours.h" />
     <ClInclude Include="framework\pch-il2cpp.h" />
     <ClInclude Include="user\achievements.hpp" />
+    <ClInclude Include="user\gamemodes.h" />
     <ClInclude Include="user\DestroyableSingleton.h" />
     <ClInclude Include="user\keybinds.h" />
     <ClInclude Include="resources\resource_data.h" />

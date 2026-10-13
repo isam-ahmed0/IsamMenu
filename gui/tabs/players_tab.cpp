@@ -683,6 +683,20 @@ namespace PlayersTab {
                                 State.playerToFollow = State.selectedPlayer;
                             }
                         }
+
+                        if (!selectedPlayer.is_LocalPlayer()) {
+                            ImGui::SameLine();
+                            if (State.followTarget.equals(State.selectedPlayer)) {
+                                if (AnimatedButton("Stop Following")) {
+                                    State.followTarget = {};
+                                    State.FollowPlayer = false;
+                                }
+                            }
+                            else if (AnimatedButton("Follow")) {
+                                State.followTarget = State.selectedPlayer;
+                                State.FollowPlayer = true;
+                            }
+                        }
                     }
 
                     if (IsInGame() && PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer))

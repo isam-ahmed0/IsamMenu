@@ -769,6 +769,28 @@ namespace SelfTab {
                 }
             }
 
+            if (ToggleButton("Follow Player at Set Distance", &State.FollowPlayer)) {
+                if (!State.FollowPlayer) State.followTarget = {};
+                State.Save();
+            }
+            if (State.FollowPlayer) {
+                ImGui::SameLine();
+                if (State.followTarget.has_value()) {
+                    auto followResult = State.followTarget.validate();
+                    auto followData = followResult.has_value() ? GetPlayerData(followResult.get_PlayerControl()) : nullptr;
+                    std::string followName = followData != nullptr ? convert_from_string(followData->fields.PlayerName) : "Unknown";
+                    if (AnimatedButton(("Following: " + followName + " (Stop)").c_str()))
+                        State.followTarget = {};
+                }
+                else {
+                    ImGui::TextDisabled("Select a player to follow in the Players tab.");
+                }
+                ImGui::InputFloat("Follow Distance", &State.FollowPlayerDistance, 0.0f, 0.0f, "%.2f m");
+                if (State.FollowPlayerDistance < 0.2f) State.FollowPlayerDistance = 0.2f;
+                ImGui::InputFloat("Follow Speed", &State.FollowPlayerSpeed, 0.0f, 0.0f, "%.2f m/s");
+                if (State.FollowPlayerSpeed < 0.1f) State.FollowPlayerSpeed = 0.1f;
+            }
+
             ColorMapping FAKEROLE_NAMES_COLOR[] = {
                 {"Crewmate",		State.CrewmateColor},
                 {"Impostor",		State.ImpostorColor},

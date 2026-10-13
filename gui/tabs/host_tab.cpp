@@ -6,6 +6,7 @@
 #include "gui-helpers.hpp"
 #include "_hooks.h"
 #include "sabotage_tab.h"
+#include "gamemodes.h"
 
 bool editingAutoStartPlayerCount = false;
 
@@ -463,15 +464,15 @@ namespace HostTab {
                     State.Save();
 
                 if (IsInLobby()) {
-                    std::vector<const char*> GAMEMODES = { "Default", "Task Speedrun" };
-                    if (State.DisableHostAnticheat) GAMEMODES = { "Default", "Task Speedrun", "Battle Royale" };
-                    int maxIndex = State.DisableHostAnticheat ? 2 : 1;
+                    std::vector<const char*> GAMEMODES = Gamemodes::Names();
+                    int maxIndex = (int)GAMEMODES.size() - 1;
                     State.GameMode = std::clamp(State.GameMode, 0, maxIndex);
                     if (CustomListBoxInt("Game Mode", &State.GameMode, GAMEMODES, 100 * State.dpiScale)) {
-                        State.TaskSpeedrun = (State.GameMode == 1);
-                        State.BattleRoyale = (State.DisableHostAnticheat && State.GameMode == 2);
                         State.Save();
                     }
+                    Gamemodes::SyncSelection();
+                    if (State.GameMode == (int)Gamemodes::ToIndex(CustomGameMode::BattleRoyale) && !State.DisableHostAnticheat)
+                        ImGui::TextDisabled("Battle Royale requires disabling host anticheat (+25).");
 
                     if (ToggleButton("End Game After Duration", &State.UseGameModeDuration)) {
                         State.Save();

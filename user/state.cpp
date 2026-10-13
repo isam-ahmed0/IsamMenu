@@ -364,6 +364,11 @@ void Settings::Load() {
         JSON_TRYGET("AutoOpenDoors", this->AutoOpenDoors);
         JSON_TRYGET("MoveInVentAndShapeshift", this->MoveInVentAndShapeshift);
         JSON_TRYGET("AlwaysMove", this->AlwaysMove);
+        JSON_TRYGET("FollowPlayer", this->FollowPlayer);
+        JSON_TRYGET("FollowPlayerDistance", this->FollowPlayerDistance);
+        JSON_TRYGET("FollowPlayerSpeed", this->FollowPlayerSpeed);
+        if (this->FollowPlayerDistance < 0.2f) this->FollowPlayerDistance = 0.2f;
+        if (this->FollowPlayerSpeed < 0.1f) this->FollowPlayerSpeed = 0.1f;
         JSON_TRYGET("AnimationlessShapeshift", this->AnimationlessShapeshift);
         JSON_TRYGET("DisableKillAnimation", this->DisableKillAnimation);
         JSON_TRYGET("KillImpostors", this->KillImpostors);
@@ -1081,6 +1086,9 @@ void Settings::Save() {
                 { "AutoOpenDoors", this->AutoOpenDoors },
                 { "MoveInVentAndShapeshift", this->MoveInVentAndShapeshift },
                 { "AlwaysMove", this->AlwaysMove },
+                { "FollowPlayer", this->FollowPlayer },
+                { "FollowPlayerDistance", this->FollowPlayerDistance },
+                { "FollowPlayerSpeed", this->FollowPlayerSpeed },
                 { "AnimationlessShapeshift", this->AnimationlessShapeshift },
                 { "DisableKillAnimation", this->DisableKillAnimation },
                 { "KillImpostors", this->KillImpostors },

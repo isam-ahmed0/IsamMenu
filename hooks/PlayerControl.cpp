@@ -11,6 +11,7 @@
 #include <iostream>
 #include <optional>
 #include "logger.h"
+#include "gamemodes.h"
 
 using namespace std::chrono;
 
@@ -1107,6 +1108,9 @@ void dPlayerControl_MurderPlayer(PlayerControl* __this, PlayerControl* target, M
     }
     PlayerControl_MurderPlayer(__this, target, resultFlags, method);
 
+    if (auto* gameMode = Gamemodes::Active())
+        gameMode->OnMurder(__this, target);
+
     if (Object_1_IsNull((Object_1*)*Game::pShipStatus)) return;
     if (!State.PanicMode && State.ReportOnMurder && (!(__this == *Game::pLocalPlayer || PlayerIsImpostor(GetPlayerData(*Game::pLocalPlayer))) || !State.PreventSelfReport)) {
         PlayerControl_CmdReportDeadBody(*Game::pLocalPlayer, GetPlayerData(target), nullptr);
@@ -1160,6 +1164,16 @@ void dPlayerControl_CheckMurder(PlayerControl* __this, PlayerControl* target, Me
     }
     if (IsHost() && State.BattleRoyale && State.DisableHostAnticheat)
         return PlayerControl_RpcMurderPlayer(__this, target, true, NULL); // Force succeed murder in battle royale
+    if (IsHost()) {
+        auto* gameMode = Gamemodes::Active();
+        if (gameMode != nullptr && gameMode->Id() == CustomGameMode::ShiftAndSneak) {
+            if (!gameMode->OnCheckMurder(__this, target)) {
+                if (target != nullptr) PlayerControl_ShowFailedMurder(__this, NULL);
+                return;
+            }
+            return PlayerControl_RpcMurderPlayer(__this, target, true, NULL);
+        }
+    }
     auto pData = GetPlayerData(__this), tData = GetPlayerData(target);
     if (!PlayerIsImpostor(pData)) {
         if (State.SafeMode && State.Enable_SMAC && State.SMAC_CheckMurder) SMAC_OnCheatDetected(__this, "Abnormal Murder Player");

@@ -141,6 +141,8 @@ public:
     bool DisableKills = false;
     bool BattleRoyale = false;
     bool TaskSpeedrun = false;
+    bool Infection = false;
+    bool ShiftAndSneak = false;
     float SpeedrunTimer = 0.f;
     bool SpeedrunOver = false;
     int GameMode = 0;
@@ -641,6 +643,11 @@ public:
     PlayerSelection playerToAttach;
     PlayerSelection playerToChatAs;
     PlayerSelection playerToWhisper;
+
+    bool FollowPlayer = false;
+    PlayerSelection followTarget;
+    float FollowPlayerDistance = 2.f;
+    float FollowPlayerSpeed = 5.f;
 
     Vector3 camPos = { NULL, NULL, NULL };
     Vector3 prevCamPos = { NULL, NULL, NULL };

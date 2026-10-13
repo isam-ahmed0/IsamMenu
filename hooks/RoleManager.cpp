@@ -5,12 +5,17 @@
 #include "logger.h"
 #include "utility.h"
 #include "game.h"
+#include "gamemodes.h"
 
 static int preChosenImpCount = 0;
 
 void dRoleManager_SelectRoles(RoleManager* __this, MethodInfo* method) {
 	if (State.ShowHookLogs) Log.HookDebug("Hook dRoleManager_SelectRoles executed", false);
 	if (State.DisableRoleManager) return RoleManager_SelectRoles(__this, method);
+	if (auto* gameMode = Gamemodes::Active(); gameMode != nullptr && gameMode->OverridesRoleAssignment()) {
+		gameMode->OnAssignRoles();
+		return;
+	}
 	std::vector<uint8_t> assignedPlayers;
 	GameOptions options;
 	auto allPlayers = GetAllPlayerControl();

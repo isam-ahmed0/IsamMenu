@@ -96,6 +96,7 @@ static void onGameEnd() {
         State.ControlPet = false;
         State.petPos = { NULL, NULL };
         State.playerToAttach = {};
+        State.followTarget = {};
         State.DisableControlPetHand = false;
         State.ChatSpamMode = 0;
         State.HasSpawnedIn = false;
@@ -696,6 +697,31 @@ void dInnerNetClient_Update(InnerNetClient* __this, MethodInfo* method) {
                     attachDelay = int(0.1 * GetFps());
                 }
                 else attachDelay--;
+            }
+
+            // Follow a player at a set distance with smooth walk-like movement
+            auto followPlayer = State.followTarget.validate();
+            if (State.FollowPlayer && followPlayer.has_value() && (IsInGame() || IsInLobby()) && !State.InMeeting && !State.PanicMode) {
+                auto local = *Game::pLocalPlayer;
+                auto localData = GetPlayerData(local);
+                if (local != nullptr && localData != nullptr && !localData->fields.IsDead && !local->fields.inVent
+                    && local->fields.NetTransform != nullptr && followPlayer.get_PlayerControl() != nullptr) {
+                    Vector2 targetPos = GetTrueAdjustedPosition(followPlayer.get_PlayerControl());
+                    Vector2 localPos = GetTrueAdjustedPosition(local);
+                    float dx = targetPos.x - localPos.x;
+                    float dy = targetPos.y - localPos.y;
+                    float dist = std::sqrt((dx * dx) + (dy * dy));
+                    if (dist > State.FollowPlayerDistance + 0.01f) {
+                        float step = State.FollowPlayerSpeed * Time_get_deltaTime(NULL);
+                        float remaining = dist - State.FollowPlayerDistance;
+                        if (step > remaining) step = remaining;
+                        Vector2 newPos = {
+                            localPos.x + (dx / dist) * step,
+                            localPos.y + (dy / dist) * step
+                        };
+                        CustomNetworkTransform_RpcSnapTo(local->fields.NetTransform, newPos, NULL);
+                    }
+                }
             }
 
             // Shift/Ctrl + Right-click Teleport
@@ -2020,7 +2046,7 @@ void dInnerNetClient_EnqueueDisconnect(InnerNetClient* __this, DisconnectReasons
 
 void dGameManager_RpcEndGame(GameManager* __this, GameOverReason__Enum endReason, bool showAd, MethodInfo* method) {
     if (State.ShowHookLogs) Log.HookDebug("Hook dGameManager_RpcEndGame executed", false);
-    if (!State.PanicMode && IsHost() && (State.NoGameEnd || State.GameMode != 0))
+    if (!State.PanicMode && IsHost() && (State.NoGameEnd || State.TaskSpeedrun || State.BattleRoyale))
         return;
     GameManager_RpcEndGame(__this, endReason, showAd, method);
 }
