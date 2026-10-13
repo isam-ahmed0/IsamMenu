@@ -1,0 +1,29 @@
+version: 1.0.{build}
+image: Visual Studio 2022
+clone_depth: 1
+
+environment:
+  MSBUILDDISABLENODEREUSE: 1
+  APPVEYOR_SAVE_CACHE_ON_ERROR: true
+
+cache:
+  - Release
+  - Release_Version
+
+install:
+  - cmd: echo "No dependencies to install"
+
+build_script:
+  - msbuild SickoMenu.sln /m /p:Configuration=Release /p:Platform=x86 /p:PlatformToolset=v143 /verbosity:minimal
+  - msbuild SickoMenu.sln /m /p:Configuration=Release_Version /p:Platform=x86 /p:PlatformToolset=v143 /verbosity:minimal
+
+after_build:
+  - mkdir dist
+  - copy Release\SickoMenu.dll dist\
+  - copy Release_Version\version.dll dist\
+  - copy LICENSE dist\
+
+artifacts:
+  - path: dist
+    name: SickoMenu_Itch_x86
+    type: zip
